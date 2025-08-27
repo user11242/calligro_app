@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "500166558232",
+    "project_id": "calligro-bcfb2",
+    "storage_bucket": "calligro-bcfb2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500166558232:android:9549878d6a0a0aa861396d",
+        "android_client_info": {
+          "package_name": "com.example.calligro_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500166558232-vhlen07r2klgket5fbeeegtchlbsdl5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.calligro_app",
+            "certificate_hash": "d9976ff958c295f8f05d854c79438d6e0ec666e1"
+          }
+        },
+        {
+          "client_id": "500166558232-t947e97f4ocmap218qu3rm3u0o080pma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBebAi7veB2DgOiVcPiEgGRpgtkJidBUsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500166558232-t947e97f4ocmap218qu3rm3u0o080pma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
