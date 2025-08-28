@@ -1,8 +1,10 @@
+import 'package:calligro_app/pages/admin/admin_pending_teachers.dart';
+import 'package:calligro_app/pages/admin/admin_users.dart';
 import 'package:calligro_app/pages/forgot_password_page.dart';
 import 'package:calligro_app/pages/home_page.dart';
 import 'package:calligro_app/pages/login_page.dart';
 import 'package:calligro_app/pages/profile_page.dart';
-import 'package:calligro_app/pages/admin/dashboard.dart';
+import 'package:calligro_app/pages/admin/admin_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -17,6 +19,8 @@ void main() async{
       '/ProfilePage' : (context) => ProfilePage(),
       'ForgotPassword' : (context) => ForgotPasswordPage(),
       '/adminDashboard' : (context) => AdminDashboardPage(),
+      '/adminUsers' : (context) => AdminUsersPage(),
+      '/adminPendingTeachers' : (context) => AdminPendingTeachersPage(),
     },
 
   ));
