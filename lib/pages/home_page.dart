@@ -1,6 +1,10 @@
+import 'package:calligro_app/pages/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:calligro_app/theme/colors.dart';
 import 'package:calligro_app/pages/app_bar.dart';
+import 'package:calligro_app/pages/custom_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:calligro_app/pages/bottom_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,17 +14,26 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: Appbar(),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              leading: Icon(Icons.account_balance),
-              title: const Text("Profile"),
+      drawer: CustomDrawer(),
+      body: Stack(
+        children: [
+          const Background(),
+          const Header(),
+
+          // ✅ Floating bottom nav bar
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: CustomBottomNavBar(
+              currentIndex: 0,
+              onTap: (index) {
+                // TODO: Handle navigation
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      body: Stack(children: const [Background(), Header(),]),
     );
   }
 }
@@ -38,19 +51,9 @@ class Background extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        // Gradient overlay
         Positioned.fill(
           child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black.withOpacity(0.7), // dark at top
-                  Colors.transparent, // fade out
-                ],
-              ),
-            ),
+            color: Colors.black.withOpacity(0.7), // dark overlay
           ),
         ),
       ],
@@ -60,16 +63,18 @@ class Background extends StatelessWidget {
 
 class Header extends StatelessWidget {
   const Header({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.topCenter,
-      padding: EdgeInsets.only(top: 150),
-      child: Container(
-        padding: EdgeInsets.only(left: 30),
-        child: const Text(
-          "A journey that begins from the first point",
-          style: TextStyle(color: AppColors.textColor, fontSize: 40),
+      padding: const EdgeInsets.only(top: 150, left: 30),
+      child: const Text(
+        "A journey that begins from the first point",
+        style: TextStyle(
+          color: AppColors.textColor,
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
