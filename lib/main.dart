@@ -21,10 +21,18 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> _saveTokenToFirestore(String token) async {
   final user = FirebaseAuth.instance.currentUser;
   if (user != null) {
-    await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
-      "fcmToken": token,
-    });
-    debugPrint("✅ FCM Token saved for user: ${user.uid}");
+    final userDoc = await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
+    final role = userDoc.data()?['role'];
+
+    // ✅ Save token only for admins
+    if (role == "admin") {
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
+        "fcmToken": token,
+      });
+      debugPrint("✅ FCM Token saved for ADMIN: ${user.uid}");
+    } else {
+      debugPrint("⚠️ Not an admin, token not saved for user: ${user.uid}");
+    }
   } else {
     debugPrint("⚠️ No logged-in user, token not saved");
   }
