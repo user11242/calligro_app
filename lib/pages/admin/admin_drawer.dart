@@ -9,7 +9,7 @@ class AdminDrawer extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     if (context.mounted) {
-      Navigator.pushReplacementNamed(context, "LoginPage");
+      Navigator.pushReplacementNamed(context, "/LoginPage");
     }
   }
 

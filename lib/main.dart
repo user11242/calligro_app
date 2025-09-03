@@ -1,8 +1,9 @@
 import 'package:calligro_app/pages/admin/admin_pending_teachers.dart';
 import 'package:calligro_app/pages/admin/admin_users.dart';
-import 'package:calligro_app/pages/forgot_password_page.dart';
+import 'package:calligro_app/pages/auth/forgot_password_page.dart';
+import 'package:calligro_app/pages/auth/register_page.dart';
 import 'package:calligro_app/pages/home_page.dart';
-import 'package:calligro_app/pages/login_page.dart';
+import 'package:calligro_app/pages/auth/login_page.dart';
 import 'package:calligro_app/pages/profile_page.dart';
 import 'package:calligro_app/pages/admin/admin_dashboard.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // ✅ dotenv
 
 // 🔔 Background message handler (must be top-level)
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -21,7 +23,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> _saveTokenToFirestore(String token) async {
   final user = FirebaseAuth.instance.currentUser;
   if (user != null) {
-    final userDoc = await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
+    final userDoc =
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
     final role = userDoc.data()?['role'];
 
     // ✅ Save token only for admins
@@ -38,9 +41,16 @@ Future<void> _saveTokenToFirestore(String token) async {
   }
 }
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ Load env before Firebase
+  await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp();
+
+  // ✅ Enable phone auth debug logging (helpful for OTP issues)
+  FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: false);
 
   // 🔔 Register background handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -70,12 +80,13 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: "LoginPage",
+    initialRoute: "/LoginPage",
     routes: {
       '/': (context) => HomePage(),
-      'LoginPage': (context) => LoginPage(),
+      '/LoginPage': (context) => LoginPage(),
+      '/RegisterPage': (context) => RegisterPage(),
       '/ProfilePage': (context) => ProfilePage(),
-      'ForgotPassword': (context) => ForgotPasswordPage(),
+      '/forgotPassword': (context) => ForgotPasswordPage(),
       '/adminDashboard': (context) => AdminDashboardPage(),
       '/adminUsers': (context) => AdminUsersPage(),
       '/adminPendingTeachers': (context) => AdminPendingTeachersPage(),
