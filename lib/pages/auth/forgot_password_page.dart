@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:calligro_app/theme/colors.dart';
+import 'widgets/auth_text_field.dart';
+import 'widgets/auth_button.dart';
+
+import '../../theme/colors.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -11,7 +14,7 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  final TextEditingController emailController = TextEditingController();
+  final emailController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -47,7 +50,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() => isLoading = true);
 
     try {
-      // 🔍 Check Firestore for user document with this email
       final query = await _firestore
           .collection("users")
           .where("email", isEqualTo: email)
@@ -63,7 +65,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         if (status != "approved") {
           _showMessage("Your account is not approved yet.", false);
         } else {
-          // ✅ If approved, send reset email
           await _auth.sendPasswordResetEmail(email: email);
           _showMessage("Password reset email sent!", true);
           Navigator.pop(context);
@@ -71,7 +72,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       }
     } on FirebaseAuthException catch (e) {
       _showMessage(e.message ?? "Error sending reset email", false);
-    } catch (e) {
+    } catch (_) {
       _showMessage("Something went wrong. Try again.", false);
     } finally {
       setState(() => isLoading = false);
@@ -86,18 +87,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          /// Background
           Positioned.fill(
             child: Image.asset(
               "assets/backgrounds/main_background.jpg",
               fit: BoxFit.cover,
             ),
           ),
-          /// Dark overlay
           Positioned.fill(
             child: Container(color: Colors.black.withOpacity(0.5)),
           ),
-          /// Page title + Back button
           Positioned.fill(
             child: SafeArea(
               child: Column(
@@ -105,7 +103,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 children: [
                   const SizedBox(height: 20),
                   IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 28,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                   const SizedBox(height: 40),
@@ -136,7 +138,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ),
 
-          /// Bottom container with form
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -152,76 +153,29 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 children: [
                   const SizedBox(height: 20),
 
-                  /// Email Field
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.07),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      controller: emailController,
-                      style: const TextStyle(color: Colors.white),
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18, horizontal: 16),
-                        hintText: "Email Address",
-                        hintStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
-                          fontSize: 15,
-                        ),
-                        prefixIcon: const Icon(Icons.email,
-                            color: AppColors.textColor),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  /// Reusable text field
+                  AuthTextField(
+                    controller: emailController,
+                    hint: "Email Address",
+                    icon: Icons.email, // ✅ now supported
+                    keyboardType: TextInputType.emailAddress,
                   ),
 
                   const SizedBox(height: 25),
 
-                  /// Reset Button
-                  DecoratedBox(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF8B4513),
-                          Color(0xFFEEE593),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(55),
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      onPressed: isLoading ? null : _handleResetPassword,
-                      child: isLoading
-                          ? const CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
-                            )
-                          : const Text(
-                              "Send Reset Email",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                  /// Reusable button
+                  isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
                             ),
-                    ),
-                  ),
+                          ),
+                        )
+                      : AuthButton(
+                          text: "Send Reset Email",
+                          onPressed: _handleResetPassword,
+                        ),
                 ],
               ),
             ),
