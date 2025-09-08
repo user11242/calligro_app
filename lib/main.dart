@@ -1,17 +1,19 @@
-import 'package:calligro_app/pages/admin/admin_pending_teachers.dart';
-import 'package:calligro_app/pages/admin/admin_users.dart';
-import 'package:calligro_app/pages/auth/forgot_password_page.dart';
-import 'package:calligro_app/pages/auth/register_page.dart';
-import 'package:calligro_app/pages/home_page.dart';
-import 'package:calligro_app/pages/auth/login_page.dart';
-import 'package:calligro_app/pages/profile_page.dart';
-import 'package:calligro_app/pages/admin/admin_dashboard.dart';
+import 'package:calligro_app/features/admin/admin_dashboard.dart';
+import 'package:calligro_app/features/admin/pages/admin_pending_teachers.dart';
+import 'package:calligro_app/features/admin/pages/admin_users.dart';
+import 'package:calligro_app/features/auth/pages/forgot_password_page.dart';
+import 'package:calligro_app/features/auth/pages/register_page.dart';
+import 'package:calligro_app/features/student/pages/home_page.dart';
+import 'package:calligro_app/features/auth/pages/login_page.dart';
+import 'package:calligro_app/features/student/pages/profile_page.dart';
+import 'package:calligro_app/features/admin/admin_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:calligro_app/features/teacher/teacher_dashboard.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // ✅ dotenv
 
 // 🔔 Background message handler (must be top-level)
@@ -90,6 +92,7 @@ Future<void> main() async {
       '/adminDashboard': (context) => AdminDashboardPage(),
       '/adminUsers': (context) => AdminUsersPage(),
       '/adminPendingTeachers': (context) => AdminPendingTeachersPage(),
+      '/teacherDashboard':(context) => TeacherDashboardPage()
     },
   ));
 
