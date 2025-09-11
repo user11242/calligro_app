@@ -23,6 +23,7 @@ class StatCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Container(
         decoration: BoxDecoration(
+          // ✅ Keeping hardcoded background color for now
           color: const Color(0xFF1E1E1E),
           borderRadius: BorderRadius.circular(20),
         ),
@@ -32,16 +33,23 @@ class StatCard extends StatelessWidget {
           children: [
             Icon(icon, size: 40, color: color),
             const SizedBox(height: 12),
-            Text(title,
-                style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white, // ✅ Text stays white for dark cards
+              ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 8),
             Text(
               count.toString(),
               style: TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold, color: color),
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: color, // ✅ Uses the dynamic color for emphasis
+              ),
             ),
           ],
         ),

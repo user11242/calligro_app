@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:calligro_app/core/theme/colors.dart';
 import '../../data/services/auth_service.dart';
 import 'otp_input_widget.dart';
 
@@ -39,7 +38,9 @@ class _EmailOtpStepState extends State<EmailOtpStep> {
   @override
   void dispose() {
     _timer?.cancel();
-    for (var c in _controllers) c.dispose();
+    for (var c in _controllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 

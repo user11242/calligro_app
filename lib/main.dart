@@ -1,3 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // keep this for Firebase initialization
+// import 'package:firebase_messaging/firebase_messaging.dart'; // 🔕 Notifications disabled
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Import your feature pages
 import 'package:calligro_app/features/admin/admin_dashboard.dart';
 import 'package:calligro_app/features/admin/pages/admin_pending_teachers.dart';
 import 'package:calligro_app/features/admin/pages/admin_users.dart';
@@ -6,32 +13,30 @@ import 'package:calligro_app/features/auth/pages/register_page.dart';
 import 'package:calligro_app/features/student/pages/home_page.dart';
 import 'package:calligro_app/features/auth/pages/login_page.dart';
 import 'package:calligro_app/features/student/pages/profile_page.dart';
-import 'package:calligro_app/features/admin/admin_dashboard.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:calligro_app/features/teacher/teacher_dashboard.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // ✅ dotenv
 
-// 🔔 Background message handler (must be top-level)
+/* 🔕 Disabled Firebase Messaging background handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   debugPrint("📩 Background message received: ${message.notification?.title}");
 }
 
 Future<void> _saveTokenToFirestore(String token) async {
   final user = FirebaseAuth.instance.currentUser;
   if (user != null) {
-    final userDoc =
-        await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
+    final userDoc = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .get();
     final role = userDoc.data()?['role'];
 
-    // ✅ Save token only for admins
     if (role == "admin") {
-      await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .update({
         "fcmToken": token,
       });
       debugPrint("✅ FCM Token saved for ADMIN: ${user.uid}");
@@ -42,24 +47,21 @@ Future<void> _saveTokenToFirestore(String token) async {
     debugPrint("⚠️ No logged-in user, token not saved");
   }
 }
+*/
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Load env before Firebase
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  await Firebase.initializeApp();
-
-  // ✅ Enable phone auth debug logging (helpful for OTP issues)
-  FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: false);
-
-  // 🔔 Register background handler
+  /* 🔕 Disabled Firebase Messaging setup
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  // 🔔 Request notification permissions (iOS + Android 13+)
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     badge: true,
@@ -67,22 +69,18 @@ Future<void> main() async {
   );
   debugPrint("📌 User granted permission: ${settings.authorizationStatus}");
 
-  // 🔔 Get the current FCM token
   String? token = await messaging.getToken();
-  if (token != null) {
-    debugPrint("📌 Initial FCM Token: $token");
-    await _saveTokenToFirestore(token);
-  }
+  debugPrint("📌 Initial FCM Token: $token");
 
-  // 🔄 Automatically update token on refresh
   FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
     debugPrint("🔄 FCM Token refreshed: $newToken");
     await _saveTokenToFirestore(newToken);
   });
+  */
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: "/LoginPage",
+    initialRoute: "/adminDashboard",
     routes: {
       '/': (context) => HomePage(),
       '/LoginPage': (context) => LoginPage(),
@@ -92,17 +90,17 @@ Future<void> main() async {
       '/adminDashboard': (context) => AdminDashboardPage(),
       '/adminUsers': (context) => AdminUsersPage(),
       '/adminPendingTeachers': (context) => AdminPendingTeachersPage(),
-      '/teacherDashboard':(context) => TeacherDashboardPage()
+      '/teacherDashboard': (context) => TeacherDashboardPage(),
     },
   ));
 
-  // 🔔 Foreground notifications
+  /* 🔕 Disabled foreground and background Firebase Messaging listeners
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     debugPrint("📩 Foreground message: ${message.notification?.title}");
   });
 
-  // 🔔 App opened via notification
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     debugPrint("📩 App opened from notification: ${message.notification?.title}");
   });
+  */
 }

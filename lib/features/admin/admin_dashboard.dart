@@ -75,7 +75,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: const Color(0xFF121212), // ← original color kept
       appBar: const AdminAppBar(),
       drawer: const AdminDrawer(),
       body: _buildOverview(),

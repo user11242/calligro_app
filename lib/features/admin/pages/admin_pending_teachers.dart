@@ -87,13 +87,24 @@ class TeacherTile extends StatelessWidget {
               ),
             ),
             onPressed: () async {
-              await firestore.collection("users").doc(teacher.id).update({
-                "status": "approved",
-              });
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Teacher approved!")),
-                );
+              try {
+                await firestore.collection("users").doc(teacher.id).update({
+                  "status": "approved",
+                });
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Teacher approved!")),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Error approving teacher: $e"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               }
             },
             label: const Text("Approve"),
@@ -125,13 +136,23 @@ class AdminPendingTeachersPage extends StatelessWidget {
             .where("status", isEqualTo: "pending")
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                "Something went wrong. Please try again.",
+                style: TextStyle(color: Colors.white70),
+              ),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final teachers = snapshot.data!.docs
-              .map((doc) => TeacherModel.fromDoc(doc))
-              .toList();
+          final teachers = snapshot.data?.docs
+                  .map((doc) => TeacherModel.fromDoc(doc))
+                  .toList() ??
+              [];
 
           if (teachers.isEmpty) {
             return const Center(

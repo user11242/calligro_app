@@ -56,8 +56,12 @@ class _VerificationWizardPageState extends State<VerificationWizardPage> {
   @override
   void dispose() {
     _resendTimer?.cancel();
-    for (var c in phoneOtpControllers) c.dispose();
-    for (var c in emailOtpControllers) c.dispose();
+    for (var c in phoneOtpControllers) {
+      c.dispose();
+    }
+    for (var c in emailOtpControllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 

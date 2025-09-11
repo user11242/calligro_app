@@ -37,7 +37,9 @@ class _PhoneOtpStepState extends State<PhoneOtpStep> {
   @override
   void dispose() {
     _timer?.cancel();
-    for (var c in _controllers) c.dispose();
+    for (var c in _controllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 

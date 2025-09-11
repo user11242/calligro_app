@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// -------- MODEL --------
 class UserModel {
   final String id;
   final String name;
@@ -20,12 +21,14 @@ class UserModel {
       id: doc.id,
       name: data["name"] ?? "No Name",
       photoUrl: data["photoUrl"],
-      extraFields: Map.from(data)..removeWhere((k, _) =>
-          ["name", "photoUrl", "userId", "uid", "createdAt"].contains(k)),
+      extraFields: Map.from(data)
+        ..removeWhere((k, _) =>
+            ["name", "photoUrl", "userId", "uid", "createdAt"].contains(k)),
     );
   }
 }
 
+/// -------- TILE WIDGET --------
 class UserTile extends StatelessWidget {
   final UserModel user;
   const UserTile({super.key, required this.user});
@@ -64,7 +67,8 @@ class UserTile extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
                     "${entry.key}: ${entry.value}",
-                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                    style: const TextStyle(
+                        color: Colors.white70, fontSize: 14),
                   ),
                 );
               }).toList(),
@@ -76,6 +80,7 @@ class UserTile extends StatelessWidget {
   }
 }
 
+/// -------- PAGE --------
 class AdminUsersPage extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -92,11 +97,31 @@ class AdminUsersPage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection("users").snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                "Something went wrong. Please try again.",
+                style: TextStyle(color: Colors.white70),
+              ),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final users = snapshot.data!.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+          final users =
+              snapshot.data?.docs.map((doc) => UserModel.fromDoc(doc)).toList() ??
+                  [];
+
+          if (users.isEmpty) {
+            return const Center(
+              child: Text(
+                "No users found.",
+                style: TextStyle(color: Colors.white70),
+              ),
+            );
+          }
 
           return ListView.builder(
             padding: const EdgeInsets.all(16),

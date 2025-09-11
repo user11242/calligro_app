@@ -1,4 +1,4 @@
-import 'package:google_sign_in/google_sign_in.dart';
+//import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'email_otp_service.dart';
 
@@ -18,7 +18,7 @@ class AuthService {
   /// 🔹 Unified sign-out (works for all providers)
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut(); // clear Google session too
+    //await GoogleSignIn().signOut(); // clear Google session too
   }
 
   // ============ EMAIL AUTH ============

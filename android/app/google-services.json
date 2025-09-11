@@ -37,6 +37,13 @@
             {
               "client_id": "500166558232-t947e97f4ocmap218qu3rm3u0o080pma.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "500166558232-aegg8epoq3ffo3b0klbgqvcl6jilq80j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yazan.calligroApp"
+              }
             }
           ]
         }

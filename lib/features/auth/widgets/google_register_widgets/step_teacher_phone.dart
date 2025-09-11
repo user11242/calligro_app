@@ -24,11 +24,11 @@ class _StepTeacherPhoneState extends State<StepTeacherPhone> {
     try {
       final parsed = await _phoneNumberUtil.parse(number, regionCode: isoCode);
 
-      if (parsed.e164 != null && parsed.e164!.isNotEmpty) {
+      if (parsed.e164.isNotEmpty) {
         // ✅ valid number
         setState(() => _errorText = null);
-        widget.controller.text = parsed.e164!; // keep E.164 in controller
-        widget.onValidNumber?.call(parsed.e164!);
+        widget.controller.text = parsed.e164; // keep E.164 in controller
+        widget.onValidNumber?.call(parsed.e164);
       } else {
         setState(() => _errorText = "Invalid phone number");
       }

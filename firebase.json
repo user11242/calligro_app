@@ -1,15 +1,1 @@
-{
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ]
-    }
-  ]
-}
+{"functions":[{"source":"functions","codebase":"default","ignore":["node_modules",".git","firebase-debug.log","firebase-debug.*.log","*.local"]}],"flutter":{"platforms":{"android":{"default":{"projectId":"calligro-bcfb2","appId":"1:500166558232:android:9549878d6a0a0aa861396d","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"calligro-bcfb2","appId":"1:500166558232:ios:47d23de02bf40a6d61396d","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"calligro-bcfb2","configurations":{"android":"1:500166558232:android:9549878d6a0a0aa861396d","ios":"1:500166558232:ios:47d23de02bf40a6d61396d"}}}}}}
